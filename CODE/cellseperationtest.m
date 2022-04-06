@@ -98,7 +98,7 @@ cells_touch_edge = cells_touch_1(1:2:end) +cells_touch_1(2:2:end)+...
 
   %text(boundary(1,2),boundary(1,1),num2str(k) ,'Color','r', 'FontSize', 15);%end
 
-  edges_cells = imdilate(edge(central_cells,'canny'),ones(3));
+  edges_cells = imdilate(edge(central_cells > 0 ,'canny'),ones(3));
 
   overlaid_cells  = img1.* uint8(repmat(1- edges_cells,[1 1 3]));
   overlaid_cells(:,:,1) = edges_cells*255;
