@@ -116,8 +116,8 @@ cells_touch_edge = cells_touch_1(1:2:end) +cells_touch_1(2:2:end)+...
 %imshow(downwardorient)
 %img1_brightness = imbinarize(blue_channel_filled)
 %solidity_allcells = regionprops(all_cells, 'Solidity');
-%below_solidity  = ismember(all_cells,find([solidity_allcells.Solidity]< 0.9100));
-%imshow(below_solidity)
+below_solidity  = ismember(all_cells,find([solidity_allcells.Solidity]< 0.9100));
+imshow(below_solidity)
 maxferet_prop = regionprops(all_cells,'MaxFeretProperties')
 neangferet  = ismember(all_cells,find([maxferet_prop.MaxFeretAngle]<0));
 imshow(neangferet);
