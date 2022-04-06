@@ -64,7 +64,7 @@ cells_touch_edge = cells_touch_1(1:2:end) +cells_touch_1(2:2:end)+...
 
 [central_cells,numCentral] = bwlabel(ismember(all_cells, find(cells_touch_edge==0)));
 
-
+central_cells_props     = regionprops(central_cells,blue_channel,'area','centroid','orientation','Solidity','MaxFeretProperties','MaxIntensity','MeanIntensity','MinIntensity');
 
 % 2 combine the edges of the final cells and add to the input image,  also
 % add a number to each cell 
@@ -116,8 +116,8 @@ cells_touch_edge = cells_touch_1(1:2:end) +cells_touch_1(2:2:end)+...
 %imshow(downwardorient)
 %img1_brightness = imbinarize(blue_channel_filled)
 %solidity_allcells = regionprops(all_cells, 'Solidity');
-below_solidity  = ismember(all_cells,find([solidity_allcells.Solidity]< 0.9100));
-imshow(below_solidity)
+%below_solidity  = ismember(all_cells,find([solidity_allcells.Solidity]< 0.9100));
+%imshow(below_solidity)
 maxferet_prop = regionprops(all_cells,'MaxFeretProperties')
 neangferet  = ismember(all_cells,find([maxferet_prop.MaxFeretAngle]<0));
 imshow(neangferet);
@@ -126,6 +126,18 @@ below_diameter_feret = ismember(all_cells,find([maxferet_prop.MaxFeretDiameter]>
 imshow(below_diameter_feret);
 %pixel_intensity = imregionalmax(img1_brightness)
 
+
+
+positions               =[central_cells_props.Centroid];
+x                       = positions(1:2:end);
+y                       = positions(2:2:end);
+numCentroids            = numel(x);
+DT                      = delaunayTriangulation(x,y)
+%DT                      = delaunay(x,y);
+numTriangles            = size(DT,1);
+%triplot(DT,x,y);
+
+[vx,vy]=voronoi(x,y);
 
 
 
