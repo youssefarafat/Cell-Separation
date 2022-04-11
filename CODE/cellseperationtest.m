@@ -127,17 +127,24 @@ imshow(below_diameter_feret);
 %pixel_intensity = imregionalmax(img1_brightness)
 
 
-
+%%
 positions               =[central_cells_props.Centroid];
 x                       = positions(1:2:end);
 y                       = positions(2:2:end);
 numCentroids            = numel(x);
-DT                      = delaunayTriangulation(x,y)
-%DT                      = delaunay(x,y);
-numTriangles            = size(DT,1);
-%triplot(DT,x,y);
+%whos
+DT                      = (delaunay(x,y))
 
-[vx,vy]=voronoi(x,y);
+numTriangles            = size(DT,1);
+%DT3 = delaunayTriangulation(x',y');
+imagesc(overlaid_cells)
+hold on
+triplot(DT,x,y);
+for k=1:numTriangles
+    DTarea            = polyarea(x(DT(k,:)),y(DT(k,:)));
+end
+
+%[vx,vy]=voronoi(x,y);
 
 
 
