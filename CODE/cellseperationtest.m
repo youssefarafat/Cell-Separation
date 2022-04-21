@@ -1,10 +1,14 @@
+%%
+function dataOut = cellseperationtest(dataIn)
 %% Remove the scale bar at the bottom right and select the blue channel
+dataIn = img1;
+[rows,cols,channels] = size(dataIn);
 img1 = imread('RBD_LKR13_1_DAPI.tif');
 img1(980:end,810:end,:)=0;
 blue_channel            = img1(:,:,3);
 % filter and threshold to detect cells
 blue_channel_filt       = imfilter(blue_channel,fspecial('Gaussian',5));
-blue_channel_thres      = blue_channel_filt>90;
+blue_channel_thres      = blue_channel_filt> 255*graythresh(dataIn);
 % label individual regions as cells, obtain properties
 blue_channel_labelled   = bwlabel(blue_channel_thres);
 blue_channel_props      = regionprops(blue_channel_labelled,'Area');
@@ -146,7 +150,13 @@ end
 
 %[vx,vy]=voronoi(x,y);
 
-
+dataOut.final_cells     = all_cells;
+dataOut.numCells        = numCells;
+dataOut.overlaid        = overlaid_cells;
+dataOut.central_cells   = central_cells;
+dataOut.numCentral      = numCentral;
+dataOut.central_props   = central_cells_props;
+dataOut.centroids       =[x' y'];
 
 
 
