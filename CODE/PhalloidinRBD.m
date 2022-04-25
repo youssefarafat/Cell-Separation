@@ -5,6 +5,6 @@ red_channelR_thres      = red_channelR_filt>120;
 red_channelR_labelled   = bwlabel(red_channelR_thres);
 red_channelR_filled     = imfill(red_channelR_labelled);
 red_channelR_clean = bwareaopen(red_channelR_filled, 150);
-red_channelR_closed = imclose(red_channelR_clean, strel('disk',30));
-red_channelR_dilate = imdilate(red_channelR_closed, strel('disk', 10));
+red_channelR_closed = imclose(red_channelR_clean, strel('disk',35));
+red_channelR_dilate = imdilate(red_channelR_closed, strel('disk', 15));
 imagesc(red_channelR_clean + red_channelR_dilate)
