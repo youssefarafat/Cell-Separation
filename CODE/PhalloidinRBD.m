@@ -1,3 +1,5 @@
+function dataOut = PhalloidinRBD(dataIn)
+dataIn = img4;
 img4 = imread("RBD_LKR13_1_Phalloidin.tif");
 red_channelR = img4(:,:,1);
 red_channelR_filt       = imfilter(red_channelR,fspecial('Gaussian',5));
@@ -7,4 +9,29 @@ red_channelR_filled     = imfill(red_channelR_labelled);
 red_channelR_clean = bwareaopen(red_channelR_filled, 150);
 red_channelR_closed = imclose(red_channelR_clean, strel('disk',35));
 red_channelR_dilate = imdilate(red_channelR_closed, strel('disk', 15));
-imagesc(red_channelR_clean + red_channelR_dilate)
+imagesc(red_channelR_clean + red_channelR_dilate);
+%splitR = (bwdist(red_channelR_clean + red_channelR_dilate)>40);
+%imagesc(splitR)
+ red_channelR_distance =(bwdist(1-red_channelR_dilate));
+ colormap jet ;
+ %%
+ red_channelR_skel = bwmorph(bwskel(red_channelR_dilate),'spur',90);
+
+ %%
+ imagesc(red_channelR_skel .* red_channelR_distance);
+ step1 = (red_channelR_skel .* red_channelR_distance) > 0;
+ step2 = (red_channelR_skel .* red_channelR_distance) <30;
+ step3 = (step1 .* step2);
+ step4 = red_channelR_dilate + step3;
+ %red_channelR_dilatesplit = ((red_channelR_skel .* red_channelR_distance)>0).*((red_channelR_skel .* red_channelR_distance)<30);
+ red_channelR_dilatesplit = imdilate(step3, strel('disk',25));
+ red_channelR_split = red_channelR_dilate - red_channelR_dilatesplit;
+
+dataOut.red_channelR_distance = red_channelR_distance; 
+dataOut.red_channelR_skel = red_channelR_skel;
+dataOut.red_channelR_split = red_channelR_split;
+ %% Repeat same operation for the WT, Turn commands into a function, find
+ %  breaking points, dilate then remove. find a line that is perpendicular.
+ %red_channelR_split = red_channelR_dilate - red_channelR_dilatesplit;
+%imagesc(red_channelR_split)
+%imagesc(1-red_channelR_split)
