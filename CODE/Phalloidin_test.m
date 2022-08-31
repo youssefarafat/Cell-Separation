@@ -9,4 +9,7 @@ red_channel_clean = bwareaopen(red_channel_filled, 150);
 red_channel_closed = imclose(red_channel_clean, strel('disk',30));
 red_channel_dilate = imdilate(red_channel_closed, strel('disk', 10));
 imagesc(red_channel_clean + red_channel_dilate)
-
+red_channel_distance =(bwdist(1-red_channel_dilate));
+ colormap jet ;
+ red_channel_skel = (bwskel(red_channel_dilate));
+ imagesc(red_channel_skel .* red_channel_distance)
