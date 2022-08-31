@@ -1,14 +1,13 @@
-%%
 function dataOut = cellseperationtest(dataIn)
 %% Remove the scale bar at the bottom right and select the blue channel
-dataIn = img1;
-[rows,cols,channels] = size(dataIn);
-img1 = imread('RBD_LKR13_1_DAPI.tif');
-img1(980:end,810:end,:)=0;
-blue_channel            = img1(:,:,3);
+%dataIn = dataIn;
+%[rows,cols,channels] = size(dataIn);
+dataIn = imread("RBD_LKR13_1_DAPI.tif");
+dataIn(980:end,810:end,:)=0;
+blue_channel            = dataIn(:,:,3);
 % filter and threshold to detect cells
 blue_channel_filt       = imfilter(blue_channel,fspecial('Gaussian',5));
-blue_channel_thres      = blue_channel_filt> 255*graythresh(dataIn);
+blue_channel_thres      = blue_channel_filt> 255*graythresh(blue_channel_filt);
 % label individual regions as cells, obtain properties
 blue_channel_labelled   = bwlabel(blue_channel_thres);
 blue_channel_props      = regionprops(blue_channel_labelled,'Area');
@@ -60,7 +59,7 @@ all_cells_props                 = regionprops(all_cells,'Area','BoundingBox','Ex
 
 %  1     Discard ANY cell that touches the border of the field of view
 %how do I do this for all the cells?????
-[rows,columns,channels] = size(img1);
+[rows,columns,channels] = size(dataIn);
 cells_touch_1 = min([all_cells_props.Extrema])<1;
 cells_touch_end = max([all_cells_props.Extrema])>(rows-0);
 cells_touch_edge = cells_touch_1(1:2:end) +cells_touch_1(2:2:end)+...
@@ -104,7 +103,7 @@ central_cells_props     = regionprops(central_cells,blue_channel,'area','centroi
 
   edges_cells = imdilate(edge(central_cells > 0 ,'canny'),ones(3));
 
-  overlaid_cells  = img1.* uint8(repmat(1- edges_cells,[1 1 3]));
+  overlaid_cells  = dataIn.* uint8(repmat(1- edges_cells,[1 1 3]));
   overlaid_cells(:,:,1) = edges_cells*255;
 
 %%
@@ -118,17 +117,17 @@ central_cells_props     = regionprops(central_cells,blue_channel,'area','centroi
 %upwardsorient  = ismember(all_cells,find([orientationprop.Orientation]>=0));
 %downwardorient = ismember(all_cells,find([orientationprop.Orientation]<0));
 %imshow(downwardorient)
-%img1_brightness = imbinarize(blue_channel_filled)
+%dataIn_brightness = imbinarize(blue_channel_filled)
 %solidity_allcells = regionprops(all_cells, 'Solidity');
 %below_solidity  = ismember(all_cells,find([solidity_allcells.Solidity]< 0.9100));
 %imshow(below_solidity)
-maxferet_prop = regionprops(all_cells,'MaxFeretProperties')
+maxferet_prop = regionprops(all_cells,'MaxFeretProperties');
 neangferet  = ismember(all_cells,find([maxferet_prop.MaxFeretAngle]<0));
 imshow(neangferet);
 
 below_diameter_feret = ismember(all_cells,find([maxferet_prop.MaxFeretDiameter]>60));
 imshow(below_diameter_feret);
-%pixel_intensity = imregionalmax(img1_brightness)
+%pixel_intensity = imregionalmax(dataIn_brightness)
 
 
 %%
@@ -137,7 +136,7 @@ x                       = positions(1:2:end);
 y                       = positions(2:2:end);
 numCentroids            = numel(x);
 %whos
-DT                      = (delaunay(x,y))
+DT                      = (delaunay(x,y));
 
 numTriangles            = size(DT,1);
 %DT3 = delaunayTriangulation(x',y');
@@ -157,9 +156,149 @@ dataOut.central_cells   = central_cells;
 dataOut.numCentral      = numCentral;
 dataOut.central_props   = central_cells_props;
 dataOut.centroids       =[x' y'];
+end
 
+%for k = 1:9
+%dataIn = imread(dir0(k).name);
+%dataOut = cellseperationtest(dataIn);
+%figure(k)
+%imagesc(dataOut.overlaid)
+%end
 
+%dir0 = dir('*DAPI.tiff')
+%numFiles            = numel(dir0);
+%figure(10)
+%for k =1:numFiles
+  %  subplot(2,5,k)
+    
+    %imagesc(imread(strcat(filesep,dir0(k).name)))
+    %ylabel(dir0(k).name,'interpreter','none')
+%end
 
+%for k =1:9
+%dataIn = imread(dir0(k).name);
+%dataOut = cellseperationtest(dataIn);
+%results(k) = dataOut.numCells;
+%end
 
+%dir0 = dir('*DAPI.tiff')
 
+%for k =1:9
+%dataIn = imread(dir0(k).name);
+%dataOut = cellseperationtest(dataIn);
+%results(k) = dataOut.numCells;
+%end
 
+%for k = 1:9
+%dataIn = imread(dir0(k).name);
+%dataOut = cellseperationtest(dataIn);
+%figure(k)
+%imagesc(dataOut.overlaid)
+%end
+
+%mean([dataOut.central_props.Area])
+%%
+% dir0 = dir('*DAPI.tiff');
+% for k = 1:10;
+% dataIn = imread(dir0(k).name);
+% dataOut = cellseperationtest(dataIn);
+% results(k,1) = dataOut.numCells;
+% results(k,2) = mean([dataOut.central_props.Area]);
+% results(k,3) = mean([dataOut.central_props.Centroid]);
+% results(k,4) = mean([dataOut.central_props.Orientation]);
+% results(k,5) = mean([dataOut.central_props.Solidity]);
+% results(k,6) = mean([dataOut.central_props.MeanIntensity]);
+% results(k,7) = mean([dataOut.central_props.MinIntensity]);
+% results(k,8) = mean([dataOut.central_props.MaxIntensity]);
+% results(k,9)= mean([dataOut.central_props.MaxFeretDiameter]);
+% results(k,10) = mean([dataOut.central_props.MaxFeretAngle]);
+% results(k,11) = std2([dataOut.central_props.Area]);
+% results(k,12) = std2([dataOut.central_props.Centroid]);
+% results(k,13) = std2([dataOut.central_props.Orientation]);
+% results(k,14) = std2([dataOut.central_props.Solidity]);
+% results(k,15) = std2([dataOut.central_props.MeanIntensity]);
+% results(k,16) = std2([dataOut.central_props.MinIntensity]);
+% results(k,17) = std2([dataOut.central_props.MaxIntensity]);
+% results(k,18) = std2([dataOut.central_props.MaxFeretDiameter]);
+% results(k,19) = std2([dataOut.central_props.MaxFeretAngle]);
+% end
+% 
+% for k = 1:19
+% [t(k),p(k),r(k)]= ttest2(results(1:5,k),results(6:10,k);
+% end
+% 
+% %%
+% % [t,p,r] = ttest2(results([1:5,2]),results([6:10,2]))
+% % 
+% % %results1 = rand(10,2);
+% % 
+% % [t1,p1,r1] = ttest2(results([1:5,3]),results([6:10,3]))
+% % %[t1,p1,r1] = ttest2(results([1:5,3]),0.5+results([6:10,3]))
+% % 
+% % 
+% % %results2 = rand(10,2);
+% % [t2,p2,r2] = ttest2(results([1:5,4]),results([6:10,4]))
+% % %[t2,p2,r2] = ttest2(results([1:5,4]),0.5+results([6:10,4]))
+% % 
+% % %results3 = rand(10,2);
+% % [t3,p3,r3] = ttest2(results([1:5,5]),results([6:10,5]))
+% % %[t3,p3,r3] = ttest2(results([1:5,5]),0.5+results([6:10,5]))
+% % 
+% % %results4 = rand(10,2);
+% % [t4,p4,r4] = ttest2(results([1:5,6]),results([6:10,6]))
+% % %[t4,p4,r4] = ttest2(results([1:5,6]),0.5+results([6:10,6]))
+% % 
+% % %results5 = rand(10,2);
+% % [t5,p5,r5] = ttest2(results([1:5,7]),results([6:10,7]))
+% % %[t5,p5,r5] = ttest2(results([1:5,7]),0.5+results([6:10,7]))
+% % 
+% % %results6 = rand(10,2);
+% % [t6,p6,r6] = ttest2(results([1:5,8]),results([6:10,8]))
+% % %[t6,p6,r6] = ttest2(results([1:5,8]),0.5+results([6:10,8]))
+% % 
+% % 
+% % %results7 = rand(10,2);
+% % [t7,p7,r7] = ttest2(results([1:5,9]),results([6:10,9]))
+% % %[t7,p7,r7] = ttest2(results([1:5,9]),0.5+results([6:10,9]))
+% % 
+% % %results8 = rand(10,2);
+% % [t8,p8,r8] = ttest2(results([1:5,10]),results([6:10,10]))%
+% % %[t8,p8,r8] = ttest2(results([1:5,10]),0.5+results([6:10,10]))
+% % 
+% % %results9 = rand(10,2);
+% % [t9,p9,r9] = ttest2(results([1:5,11]),results([6:10,11]))
+% % %[t9,p9,r9] = ttest2(results([1:5,11]),0.5+results([6:10,11]))
+% % 
+% % %results10 = rand(10,2);
+% % [t10,p10,r10] = ttest2(results([1:5,12]),results([6:10,12]))
+% % %[t10,p10,r10] = ttest2(results([1:5,12]),0.5+results([6:10,12]))
+% % 
+% % %results11 = rand(10,2);
+% % [t11,p11,r11] = ttest2(results([1:5,13]),results([6:10,13]))
+% % %[t11,p11,r11] = ttest2(results([1:5,13]),0.5+results([6:10,13]))
+% % 
+% % %results12 = rand(10,2);
+% % [t12,p12,r12] = ttest2(results([1:5,14]),results([6:10,14]))
+% % %[t12,p12,r12] = ttest2(results([1:5,14]),0.5+results([6:10,14]))
+% % 
+% % %results13 = rand(10,2);
+% % [t13,p13,r13] = ttest2(results([1:5,15]),results([6:10,15]))
+% % %[t13,p13,r13] = ttest2(results([1:5,15]),0.5+results([6:10,15]))
+% % 
+% % %results14 = rand(10,2);
+% % [t14,p14,r14] = ttest2(results([1:5,16]),results([6:10,16]))
+% % %[t14,p14,r14] = ttest2(results([1:5,16]),0.5+results([6:10,16]))
+% % 
+% % %results15 = rand(10,2);
+% % [t15,p15,r15] = ttest2(results([1:5,17]),results([6:10,17]))
+% % %[t15,p15,r15] = ttest2(results([1:5,17]),0.5+results([6:10,17]))
+% % 
+% % %results16 = rand(10,2);
+% % [t16,p16,r16] = ttest2(results([1:5,18]),results([6:10,18]))
+% % %[t16,p16,r16] = ttest2(results([1:5,18]),0.5+results([6:10,18]))
+% % 
+% % %results17 = rand(10,2);
+% % [t17,p17,r17] = ttest2(results([1:5,19]),results([6:10,19]))
+% %[t17,p17,r17] = ttest2(results([1:5,19]),0.5+results([6:10,19]))
+% 
+% 
