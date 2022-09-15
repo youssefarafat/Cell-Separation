@@ -1,5 +1,5 @@
-function dataOut = PhalloidinRBD(dataIn)
-dataIn1 = imread("RBD_LKR13_1_Phalloidin.tif");
+function dataOut = PhalloidinRBD(dataIn1)
+dataIn1 = imread("WT_LKR13_Rep1_6_Phalloidin.tiff");
 dataIn1(980:end,810:end,:)=0;
 red_channelR = dataIn1(:,:,1);
 red_channelR_filt       = imfilter(red_channelR,fspecial('Gaussian',5));
@@ -29,10 +29,17 @@ imagesc(red_channelR_clean + red_channelR_dilate);
  edgedetect = edge(red_channelR_clean,'canny');
  edgeprops = regionprops(edgedetect, 'Circularity','Orientation','Area');
  edge_filtered           = ismember(edgedetect,find([edgeprops.Area]<100));
+ islands = (bwlabel(red_channelR_dilate .* (1 - red_channelR_dilatesplit)));
+ %islands with an Area less than 12000 do not contain any cells
+ all_island_properties = regionprops(islands,'Area');
+ filtered_islands = ismember(islands,find([all_island_properties.Area]> 12000));
+ labeled_filt_islands = bwlabel(filtered_islands);
 dataOut.red_channelR_distance = red_channelR_distance; 
 dataOut.red_channelR_skel = red_channelR_skel;
 dataOut.red_channelR_split = red_channelR_split;
 dataOut.edgeprops = edgeprops;
+dataOut.islands = islands;
+dataOut.labeled_filt_islands = labeled_filt_islands;
 end
  %% Repeat same operation for the WT, Turn commands into a function, find
  %  breaking points, dilate then remove. find a line that is perpendicular.
