@@ -1,8 +1,8 @@
 function dataOut = cellseperationtest(dataIn)
 %% Remove the scale bar at the bottom right and select the blue channel
-%dataIn = dataIn;
-%[rows,cols,channels] = size(dataIn);
-dataIn = imread("WT_LKR13_Rep1_6_DAPI.tiff");
+dataIn = dataIn;
+[rows,cols,channels] = size(dataIn);
+%dataIn = imread("RBD_LKR13_1_DAPI.tiff");
 dataIn(980:end,810:end,:)=0;
 blue_channel            = dataIn(:,:,3);
 % filter and threshold to detect cells
@@ -164,6 +164,15 @@ end
 %figure(k)
 %imagesc(dataOut.overlaid)
 %end
+
+%for k = 1:10
+%dataIn = imread(dir0(k).name);
+%dataOut = cellseperationtest(dataIn);
+%figure(3)
+%subplot(2,5,k)
+%imagesc(dataOut.overlaid)
+%end
+
 
 %dir0 = dir('*DAPI.tiff')
 %numFiles            = numel(dir0);
