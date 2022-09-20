@@ -541,14 +541,14 @@ h(k) = imagesc(dataOut.labeled_filt_islands)
 h(k) = gca;
 end
 %%
-dir0 = dir('*Phalloidin.tiff');
 figure
+dir0 = dir('*Phalloidin.tiff');
 for k = 1:10
 dataIn1 = imread(dir0(k).name);
 dataOut = PhalloidinRBD(dataIn1);
-subplot(2,5,k)
-bar(dataOut.mean_area_islands(k))
+reults(k) = dataOut.mean_area_islands
 end
+bar([results])
 %%
 figure
 
@@ -611,3 +611,17 @@ dataIn1 = imread("WT_LKR13_Rep1_6_DAPI.tiff");
 dataOut = PhalloidinRBD(dataIn1);
 h10y = bar(dataOut.mean_area_islands);
 h10y=gca;
+
+%%
+figure
+dir0 = dir('*Phalloidin.tiff');
+for k = 1:10
+dataIn1 = imread(dir0(k).name);
+dataOut = PhalloidinRBD(dataIn1);
+results(k) = dataOut.mean_area_islands
+end
+results1 = rand(10,2)
+[t,p,r] = ttest2(results([1:5]),results([6:10]))
+boxplot(results1)
+
+%%
