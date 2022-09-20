@@ -505,3 +505,109 @@ h(12) = imagesc(red_channelR_split)
 h(12) = gca;
 h(12).XLim= [700 950];
 h(12).YLim= [200 400];
+
+%%
+figure
+
+subplot(1,5,1)
+h(1)= imagesc(edgedetect)
+h(1)=gca;
+
+subplot(1,5,2)
+h(2) = imagesc(edge_filtered)
+h(2) = gca;
+
+subplot(1,5,3)
+h(3)= imagesc(islands)
+h(3) = gca;
+
+subplot(1,5,4)
+h(4)=imagesc(filtered_islands)
+h(4) = gca;
+
+subplot(1,5,5)
+h(5) = imagesc(labeled_filt_islands)
+h(5) = gca;
+
+%%
+figure
+dir0 = dir('*Phalloidin.tiff');
+figure
+for k = 1:10
+dataIn1 = imread(dir0(k).name);
+dataOut = PhalloidinRBD(dataIn1);
+subplot(2,5,k)
+h(k) = imagesc(dataOut.labeled_filt_islands)
+h(k) = gca;
+end
+%%
+dir0 = dir('*Phalloidin.tiff');
+figure
+for k = 1:10
+dataIn1 = imread(dir0(k).name);
+dataOut = PhalloidinRBD(dataIn1);
+subplot(2,5,k)
+bar(dataOut.mean_area_islands(k))
+end
+%%
+figure
+
+subplot(2,5,1)
+dataIn1 = imread("RBD_LKR13_1_Phalloidin.tiff");
+dataOut = PhalloidinRBD(dataIn1);
+h1y = bar(dataOut.mean_area_islands);
+h1y=gca;
+
+subplot(2,5,2)
+dataIn1 = imread("RBD_LKR13_Rep1_1_DAPI.tiff");
+dataOut = PhalloidinRBD(dataIn1);
+h2y = bar(dataOut.mean_area_islands);
+h2y=gca;
+
+subplot(2,5,3)
+dataIn1 = imread("RBD_LKR13_Rep1_2_DAPI.tiff");
+dataOut = PhalloidinRBD(dataIn1);
+h3y = bar(dataOut.mean_area_islands);
+h3y=gca;
+
+subplot(2,5,4)
+dataIn1 = imread("RBD_LKR13_Rep1_4_DAPI.tiff");
+dataOut = PhalloidinRBD(dataIn1);
+h4y = bar(dataOut.mean_area_islands);
+h4y=gca;
+
+subplot(2,5,5)
+dataIn1 = imread("RBD_LKR13_Rep1_5_DAPI.tiff");
+dataOut = PhalloidinRBD(dataIn1);
+h5y = bar(dataOut.mean_area_islands);
+h5y=gca;
+
+subplot(2,5,6)
+dataIn1 = imread("WT_LKR13_1_DAPI.tiff");
+dataOut = PhalloidinRBD(dataIn1);
+h6y = bar(dataOut.mean_area_islands);
+h6y=gca;
+
+subplot(2,5,7)
+dataIn1 = imread("WT_LKR13_Rep1_1_DAPI.tiff");
+dataOut = PhalloidinRBD(dataIn1);
+h7y = bar(dataOut.mean_area_islands);
+h7y=gca;
+
+subplot(2,5,8)
+dataIn1 = imread("WT_LKR13_Rep1_2_DAPI.tiff");
+dataOut = PhalloidinRBD(dataIn1);
+h8y = bar(dataOut.mean_area_islands);
+h8y=gca;
+
+subplot(2,5,9)
+dataIn1 = imread("WT_LKR13_Rep1_3_DAPI.tiff");
+dataOut = PhalloidinRBD(dataIn1);
+h9y = bar(dataOut.mean_area_islands);
+h9y=gca;
+
+subplot(2,5,10)
+dataIn1 = imread("WT_LKR13_Rep1_6_DAPI.tiff");
+dataOut = PhalloidinRBD(dataIn1);
+h10y = bar(dataOut.mean_area_islands);
+h10y=gca;
