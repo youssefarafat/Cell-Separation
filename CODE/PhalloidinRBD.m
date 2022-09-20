@@ -1,5 +1,5 @@
 function dataOut = PhalloidinRBD(dataIn1)
-dataIn1 = imread("WT_LKR13_Rep1_6_Phalloidin.tiff");
+dataIn1 = imread("RBD_LKR13_1_Phalloidin.tiff");
 dataIn1(980:end,810:end,:)=0;
 red_channelR = dataIn1(:,:,1);
 red_channelR_filt       = imfilter(red_channelR,fspecial('Gaussian',5));
