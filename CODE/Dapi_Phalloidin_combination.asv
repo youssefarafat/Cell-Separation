@@ -22,8 +22,8 @@ for k = 1:n_island_image
     ratio_sum(k) = (cells_area_ratio);
     loop_fmean_ratio = sum(ratio_sum/(n_island_image));
 end
-fmean_unique_cells_island10 = sum(nnz_uni_cells)/n_island_image;
-fmean_ratio10 = sum(ratio_sum/(n_island_image));
+fmean_unique_cells_island1 = sum(nnz_uni_cells)/n_island_image;
+fmean_ratio1 = sum(ratio_sum/(n_island_image));
 
 dataOut.Unique_cells_island = Unique_cells_island;
 dataOut.cells_area_ratio = cells_area_ratio;
