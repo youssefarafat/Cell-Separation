@@ -2,7 +2,7 @@ function dataOut = cellseperationtest(dataIn)
 %% Remove the scale bar at the bottom right and select the blue channel
 dataIn = dataIn;
 [rows,cols,channels] = size(dataIn);
-%dataIn = imread("RBD_LKR13_1_DAPI.tiff");
+dataIn = imread("RBD_LKR13_1_DAPI.tiff");
 dataIn(980:end,810:end,:)=0;
 blue_channel            = dataIn(:,:,3);
 % filter and threshold to detect cells
@@ -123,10 +123,10 @@ central_cells_props     = regionprops(central_cells,blue_channel,'area','centroi
 %imshow(below_solidity)
 maxferet_prop = regionprops(all_cells,'MaxFeretProperties');
 neangferet  = ismember(all_cells,find([maxferet_prop.MaxFeretAngle]<0));
-imshow(neangferet);
+%imshow(neangferet);
 
 below_diameter_feret = ismember(all_cells,find([maxferet_prop.MaxFeretDiameter]>60));
-imshow(below_diameter_feret);
+%imshow(below_diameter_feret);
 %pixel_intensity = imregionalmax(dataIn_brightness)
 
 
@@ -140,12 +140,13 @@ DT                      = (delaunay(x,y));
 
 numTriangles            = size(DT,1);
 %DT3 = delaunayTriangulation(x',y');
-imagesc(overlaid_cells)
-hold on
-triplot(DT,x,y);
-for k=1:numTriangles
-    DTarea            = polyarea(x(DT(k,:)),y(DT(k,:)));
-end
+%imagesc(overlaid_cells)
+
+%hold on
+%triplot(DT,x,y);
+%for k=1:numTriangles
+   % DTarea            = polyarea(x(DT(k,:)),y(DT(k,:)));
+%end
 
 %[vx,vy]=voronoi(x,y);
 
