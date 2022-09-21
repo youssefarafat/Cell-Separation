@@ -1,3 +1,4 @@
+%% DAPI STEPS METHODS PART 1
 figure(1)
 
 subplot(2,6,1)
@@ -36,7 +37,7 @@ imagesc(cells_2cells)
 subplot(2,6,12)
 imagesc(all_cells)
 
-%%
+%% DAPI METHODS PART 2
 figure(2)
 
 subplot(2,2,1)
@@ -57,7 +58,7 @@ for k=1:numTriangles
     DTarea            = polyarea(x(DT(k,:)),y(DT(k,:)));
 end
 
-%%
+%% DAPI METHODS FINAL PART 1 
 figure(1)
 
 subplot(2,6,1)
@@ -108,8 +109,8 @@ h11x = imagesc(blue_channel_labelled);
 h11x = gca;
 h11x.XLim=[0 400]
 h11x.YLim=[0 400]
-
 %%
+%% DAPI METHODS FINAL PART 2
 figure 
 
 subplot(2,6,1)
@@ -174,19 +175,40 @@ h24x = imagesc(all_cells);
 h24x = gca;
 h24x.XLim=[0 400];
 h24x.YLim=[0 400];
+%% DAPI METHODS FINAL PART 3
+figure
 
-%%
+h1 = subplot(2,2,1)
+imagesc(central_cells)
+
+h2 = subplot(2,2,2)
+imagesc(edges_cells)
+
+h3 = subplot(2,2,3)
+imagesc(overlaid_cells)
+
+h4 = subplot(2,2,4)
+imagesc(overlaid_cells)
+imagesc(overlaid_cells)
+hold on 
+triplot(DT,x,y);
+for k=1:numTriangles
+    DTarea            = polyarea(x(DT(k,:)),y(DT(k,:)));
+end
+
+%% DAPI All Final Plot
 dir0 = dir('*DAPI.tiff');
 figure
 for k = 1:10
+disp(k)    
 dataIn = imread(dir0(k).name);
 dataOut = cellseperationtest(dataIn);
-subplot(2,5,k)
-h(k) = imagesc(dataOut.overlaid)
-h(k) = gca;
+h1(k) = subplot(2,5,k)
+h2(k) = imagesc(dataOut.overlaid)
+title(num2str(k))
 end
 
-%%
+%% DAPI All Cells with Delaunay
 figure
 
 subplot(2,5,1)
@@ -257,13 +279,13 @@ for k = 1:10
 h(k) = gca;
 end
 
-%%
+%% DAPI INPUT 
 dir0 = dir('*DAPI.tiff');
 figure
 for k = 1:10
-h(k) = imagesc(imread(dir0(k).name));
-h(k) = gca;
-subplot(2,5,k)
+h(k) = subplot(2,5,k)
+imagesc(imread(dir0(k).name));
+title(num2str(k))
 end
 %%
 dir0 = dir('*DAPI.tiff')
@@ -276,7 +298,8 @@ for k =1:numFiles
     ylabel(dir0(k).name,'interpreter','none')
 end
 
-%%
+%% DAPI P-VALUE 
+
 [t,p,r] = ttest2(results([1:5,2]),results([6:10,2]))
 results1 = rand(10,2);
  
@@ -346,7 +369,32 @@ results17 = rand(10,2);
 [t17,p17,r17] = ttest2(results([1:5,19]),results([6:10,19]))
 [t17,p17,r17] = ttest2(results([1:5,19]),0.5+results([6:10,19]))
 
-%%
+% dir0 = dir('*DAPI.tiff');
+% for k = 1:10;
+% dataIn = imread(dir0(k).name);
+% dataOut = cellseperationtest(dataIn);
+% results(k,1) = dataOut.numCells;
+% results(k,2) = mean([dataOut.central_props.Area]);
+% results(k,3) = mean([dataOut.central_props.Centroid]);
+% results(k,4) = mean([dataOut.central_props.Orientation]);
+% results(k,5) = mean([dataOut.central_props.Solidity]);
+% results(k,6) = mean([dataOut.central_props.MeanIntensity]);
+% results(k,7) = mean([dataOut.central_props.MinIntensity]);
+% results(k,8) = mean([dataOut.central_props.MaxIntensity]);
+% results(k,9)= mean([dataOut.central_props.MaxFeretDiameter]);
+% results(k,10) = mean([dataOut.central_props.MaxFeretAngle]);
+% results(k,11) = std2([dataOut.central_props.Area]);
+% results(k,12) = std2([dataOut.central_props.Centroid]);
+% results(k,13) = std2([dataOut.central_props.Orientation]);
+% results(k,14) = std2([dataOut.central_props.Solidity]);
+% results(k,15) = std2([dataOut.central_props.MeanIntensity]);
+% results(k,16) = std2([dataOut.central_props.MinIntensity]);
+% results(k,17) = std2([dataOut.central_props.MaxIntensity]);
+% results(k,18) = std2([dataOut.central_props.MaxFeretDiameter]);
+% results(k,19) = std2([dataOut.central_props.MaxFeretAngle]);
+% end
+%% DAPI BOXPLOTS 
+% Refer to DAPI P-VALUE
 figure
 boxplot([results1,results2])
 boxplot([results1,results,results3,results4,results5,results6,results7,results8,results9,results10,results11,results12,results13,results14,results15,results16,results17])
@@ -359,7 +407,7 @@ boxplot([results6,results7,results8,results9,results10])
 figure
 boxplot([results11,results12,results13,results14,results15,results16,results17])
 
-%%
+%% PHALLOIDIN METHOD PART 1 
 figure
 subplot(2,4,1)
 h(1) = imagesc(imread("RBD_LKR13_1_Phalloidin.tiff"))
@@ -401,7 +449,7 @@ h(8) = gca;
 h(8).XLim= [700 950];
 h(8).YLim= [200 400];
 
-%%
+%% PHALLOIDIN METHOD PART 2
 figure
 subplot(2,4,1)
 h(1) = imagesc((red_channelR_labelled))
@@ -443,7 +491,7 @@ h(8) = gca;
 h(8).XLim= [700 950];
 h(8).YLim= [200 400];
 
-%%
+%% PHALLOIDIN METHOD PART 3
 figure
 
 subplot(2,6,1)
@@ -506,7 +554,7 @@ h(12) = gca;
 h(12).XLim= [700 950];
 h(12).YLim= [200 400];
 
-%%
+%% PHALLOIDIN METHOD PART 4 
 figure
 
 subplot(1,5,1)
@@ -529,18 +577,21 @@ subplot(1,5,5)
 h(5) = imagesc(labeled_filt_islands)
 h(5) = gca;
 
-%%
+%%  PHALLOIDIN ALL FINAL OUTPUTS
 figure
 dir0 = dir('*Phalloidin.tiff');
-figure
-for k = 1:10
-dataIn1 = imread(dir0(k).name);
-dataOut = PhalloidinRBD(dataIn1);
-subplot(2,5,k)
-h(k) = imagesc(dataOut.labeled_filt_islands)
-h(k) = gca;
-end
-%%
+    
+    for k = 1:10
+        disp(k)
+        dataIn1 = imread(dir0(k).name);
+        dataOut = PhalloidinRBD(dataIn1);
+        h1(k) = subplot(2,5,k);
+        h2(k) = imagesc(dataOut.labeled_filt_islands);
+        %h2(k) = imagesc(dataIn1);
+        %h3(k) = gca;
+        title(num2str(k))
+    end
+%% PHALLOIDIN MEAN AREA ISLANDS BARPLOT
 figure
 dir0 = dir('*Phalloidin.tiff');
 for k = 1:10
@@ -612,7 +663,7 @@ dataOut = PhalloidinRBD(dataIn1);
 h10y = bar(dataOut.mean_area_islands);
 h10y=gca;
 
-%%
+%% PHALLOIDIN MEAN AREA ISLANDS P-VALUE & BOXPLOT
 figure
 dir0 = dir('*Phalloidin.tiff');
 for k = 1:10
@@ -624,4 +675,96 @@ results1 = rand(10,2)
 [t,p,r] = ttest2(results([1:5]),results([6:10]))
 boxplot(results1)
 
-%%
+%% DAPI PHALLOIDIN COMBINATION MEAN CELL AREA RATIO BARPLOT
+ratio_findings = [fmean_ratio1,fmean_ratio2,fmean_ratio3,fmean_ratio4,fmean_ratio5,fmean_ratio6,fmean_ratio7,fmean_ratio8,fmean_ratio9,fmean_ratio10];
+figure
+bar(ratio_findings)
+%% DAPI PHALLOIDIN COMBINATION MEAN CELL AREA RATIO P-VALUE & BOXPLOT
+ratio_findings1 = rand(10,2);
+[t,p,r] = ttest2(ratio_findings([1:5]),ratio_findings([6:10]))
+figure
+boxplot(ratio_findings1)
+boxplot(ratio_findings)
+
+%t =
+
+     %0
+
+
+%p =
+
+   % 0.0813
+
+
+%r =
+
+   %1.0e-03 *
+
+   %-0.3769    0.0273
+
+   %% DAPI PHALLOIDIN COMBINATION MEAN UNIQUE CELLS ISLAND BARPLOT
+   unique_findings = [fmean_unique_cells_island1,fmean_unique_cells_island2,fmean_unique_cells_island3,fmean_unique_cells_island4,fmean_unique_cells_island5,fmean_unique_cells_island6,fmean_unique_cells_island7,fmean_unique_cells_island8,fmean_unique_cells_island9,fmean_unique_cells_island10];
+   figure
+   bar(unique_findings)
+   %% DAPI PHALLOIDIN COMBINATION MEAN UNIQUE CELLS ISLAND  P-VALUE & BOXPLOT
+
+unique_findings1 = rand(10,2);
+[t1,p1,r1] = ttest2(unique_findings([1:5]),unique_findings([6:10]))
+figure
+boxplot(unique_findings1)
+boxplot(unique_findings)  
+
+%t1 =
+
+    % 0
+
+
+%p1 =
+
+   % 0.2569
+
+
+%r1 =
+
+  %-52.8482   16.2616
+  %% PHALLOIDIN INPUT DATA
+dir0 = dir('*Phalloidin.tiff');
+figure
+for k = 1:10
+h(k) = subplot(2,5,k)
+imagesc(imread(dir0(k).name));
+title(num2str(k))
+end
+  
+%% OUTPUT DAPI PHALLOIDIN COMBINATION PLOTS
+figure
+
+subplot(2,5,1)
+imagesc(imread("IDP_R_1.jpg"))
+
+subplot(2,5,2)
+imagesc(imread("IDP_R_1_1.png"))
+
+subplot(2,5,3)
+imagesc(imread("IDP_R_1_2.png"))
+
+subplot(2,5,4)
+imagesc(imread("IDP_R_1_4.png"))
+
+subplot(2,5,5)
+imagesc(imread("IDP_R_1_5.png"))
+
+subplot(2,5,6)
+imagesc(imread("IDP_W_1.png"))
+
+subplot(2,5,7)
+imagesc(imread("IDP_W_1_1.png"))
+
+subplot(2,5,8)
+imagesc(imread("IDP_W_1_2.png"))
+
+subplot(2,5,9)
+imagesc(imread("IDP_W_1_3.png"))
+
+subplot(2,5,10)
+imagesc(imread("IDP_W_1_6.png"))
