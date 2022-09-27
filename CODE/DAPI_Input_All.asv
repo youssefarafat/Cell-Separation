@@ -1,0 +1,10 @@
+%% DAPI INPUT 
+dir0 = dir('*DAPI.tiff');
+figure
+for k = 1:10
+h(k) = subplot(2,5,k)
+h(k).Position = [100 100 1000 600];
+imagesc(imread(dir0(k).name));
+title(num2str(k))
+ylabel(dir0(k).name,'interpreter','none')
+end
