@@ -15,3 +15,4 @@ ylabel = ylabel(dir0(k).name,'interpreter','none')
 
 end
 
+colormap gray
