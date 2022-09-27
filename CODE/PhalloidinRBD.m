@@ -1,5 +1,5 @@
 function dataOut = PhalloidinRBD(dataIn1)
-%dataIn1 = imread("RBD_LKR13_1_Phalloidin.tiff");
+dataIn1 = imread("RBD_LKR13_1_Phalloidin.tiff");
 dataIn1(980:end,810:end,:)=0;
 red_channelR = dataIn1(:,:,1);
 red_channelR_filt       = imfilter(red_channelR,fspecial('Gaussian',5));
@@ -9,7 +9,7 @@ red_channelR_filled     = imfill(red_channelR_labelled);
 red_channelR_clean = bwareaopen(red_channelR_filled, 150);
 red_channelR_closed = imclose(red_channelR_clean, strel('disk',35));
 red_channelR_dilate = imdilate(red_channelR_closed, strel('disk', 15));
-imagesc(red_channelR_clean + red_channelR_dilate);
+%imagesc(red_channelR_clean + red_channelR_dilate);
 %splitR = (bwdist(red_channelR_clean + red_channelR_dilate)>40);
 %imagesc(splitR)
  red_channelR_distance =(bwdist(1-red_channelR_dilate));
@@ -18,7 +18,7 @@ imagesc(red_channelR_clean + red_channelR_dilate);
  red_channelR_skel = bwmorph(bwskel(red_channelR_dilate),'spur',90);
 
  %%
- imagesc(red_channelR_skel .* red_channelR_distance);
+ %imagesc(red_channelR_skel .* red_channelR_distance);
  step1 = (red_channelR_skel .* red_channelR_distance) > 0;
  step2 = (red_channelR_skel .* red_channelR_distance) <30;
  step3 = (step1 .* step2);
@@ -34,12 +34,12 @@ imagesc(red_channelR_clean + red_channelR_dilate);
  all_island_properties = regionprops(islands,'Area');
  filtered_islands = ismember(islands,find([all_island_properties.Area]> 12000));
  labeled_filt_islands = bwlabel(filtered_islands);
- imagesc(labeled_filt_islands);
+ %imagesc(labeled_filt_islands);
  filt_island_props = regionprops(labeled_filt_islands,'Area');
  n_islands = max(labeled_filt_islands(:));
  for k =1:n_islands
-   total_area(k)= (filt_island_props(k).Area)
-   ftotal_area = sum(total_area)
+   total_area(k)= (filt_island_props(k).Area);
+   ftotal_area = sum(total_area);
  end
  mean_area_islands = ftotal_area/n_islands;
 dataOut.mean_area_islands = mean_area_islands; 
