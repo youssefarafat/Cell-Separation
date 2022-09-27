@@ -157,21 +157,22 @@ numTriangles            = size(DT,1);
 Jaccard1=((GT>0)+2*(central_cells>0));
 %Jaccard = (Jaccard1==2)/(Jaccard1>0)
 %Jaccard = sum(sum(Jaccard1==2))/sum(sum(Jaccard1>0))
-Jaccard = sum(sum(Jaccard1==3))/sum(sum(Jaccard1>0))
+Jaccard = sum(sum(Jaccard1==3))/sum(sum(Jaccard1>0));
 
-Accuracy= sum(sum((GT>0)==(central_cells>0)))/sum(sum(GT>=0))
+Accuracy= sum(sum((GT>0)==(central_cells>0)))/sum(sum(GT>=0));
 
 DICE_DAPI = ((GT>0)+2*(central_cells>0));
 TP_DICE = (DICE_DAPI == 3);
 FNFP_DICE = (DICE_DAPI > 0 & DICE_DAPI < 3);
-DICE_measure = sum(sum(2*TP_DICE))/sum(sum((2*TP_DICE) + (FNFP_DICE)))
+DICE_measure = sum(sum(2*TP_DICE))/sum(sum((2*TP_DICE) + (FNFP_DICE)));
 
-numGTCells = -1+numel(unique(GT));
+num_GTCells = -1+numel(unique(GT));
 
 GTDAPI = ((GT>0)+2*(central_cells>0));
-figure
-imagesc(GTDAPI)
-colormap gray
+%figure
+%imagesc(GTDAPI)
+%title(strcat('A=',32,num2str(Accuracy,3),',J=',32,num2str(Jaccard,3),',D=',num2str(DICE_measure,3)))
+%colormap gray
 
 
 dataOut.final_cells     = all_cells;
@@ -184,7 +185,7 @@ dataOut.centroids       =[x' y'];
 dataOut.Jaccard         = Jaccard;
 dataOut.Accuracy        = Accuracy;
 dataOut.DICE_measure    = DICE_measure;
-dataOut.numGTCells      = numGTCells;
+dataOut.num_GTCells      = num_GTCells;
 dataOut.GTDAPI          = GTDAPI;
 end
 
