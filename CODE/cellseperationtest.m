@@ -1,8 +1,10 @@
-function dataOut = cellseperationtest(dataIn)
+function dataOut = cellseperationtest(dataIn,GTinitial)
 %% Remove the scale bar at the bottom right and select the blue channel
 dataIn = dataIn;
 [rows,cols,channels] = size(dataIn);
-dataIn = imread("RBD_LKR13_1_DAPI.tiff");
+%GT=  load("RBD_LKR13_1_DAPI_GT.mat")
+GT = GTinitial.GT;
+%dataIn = imread("RBD_LKR13_1_DAPI.tiff");
 dataIn(980:end,810:end,:)=0;
 blue_channel            = dataIn(:,:,3);
 % filter and threshold to detect cells
@@ -150,6 +152,28 @@ numTriangles            = size(DT,1);
 
 %[vx,vy]=voronoi(x,y);
 
+
+
+Jaccard1=((GT>0)+2*(central_cells>0));
+%Jaccard = (Jaccard1==2)/(Jaccard1>0)
+%Jaccard = sum(sum(Jaccard1==2))/sum(sum(Jaccard1>0))
+Jaccard = sum(sum(Jaccard1==3))/sum(sum(Jaccard1>0))
+
+Accuracy= sum(sum((GT>0)==(central_cells>0)))/sum(sum(GT>=0))
+
+DICE_DAPI = ((GT>0)+2*(central_cells>0));
+TP_DICE = (DICE_DAPI == 3);
+FNFP_DICE = (DICE_DAPI > 0 & DICE_DAPI < 3);
+DICE_measure = sum(sum(2*TP_DICE))/sum(sum((2*TP_DICE) + (FNFP_DICE)))
+
+numGTCells = -1+numel(unique(GT));
+
+GTDAPI = ((GT>0)+2*(central_cells>0));
+figure
+imagesc(GTDAPI)
+colormap gray
+
+
 dataOut.final_cells     = all_cells;
 dataOut.numCells        = numCells;
 dataOut.overlaid        = overlaid_cells;
@@ -157,6 +181,11 @@ dataOut.central_cells   = central_cells;
 dataOut.numCentral      = numCentral;
 dataOut.central_props   = central_cells_props;
 dataOut.centroids       =[x' y'];
+dataOut.Jaccard         = Jaccard;
+dataOut.Accuracy        = Accuracy;
+dataOut.DICE_measure    = DICE_measure;
+dataOut.numGTCells      = numGTCells;
+dataOut.GTDAPI          = GTDAPI;
 end
 
 %for k = 1:9
@@ -311,4 +340,4 @@ end
 % % [t17,p17,r17] = ttest2(results([1:5,19]),results([6:10,19]))
 % %[t17,p17,r17] = ttest2(results([1:5,19]),0.5+results([6:10,19]))
 % 
-% 
+% boxplot(results(:,3),[1 1 1 1 1 2 2 2 2 2])
