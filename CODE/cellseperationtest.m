@@ -1,10 +1,10 @@
-function dataOut = cellseperationtest(dataIn,GTinitial)
+function dataOut = cellseperationtest(dataIn) %,GTinitial)
 %% Remove the scale bar at the bottom right and select the blue channel
-dataIn = dataIn;
-[rows,cols,channels] = size(dataIn);
-%GT=  load("RBD_LKR13_1_DAPI_GT.mat")
-GT = GTinitial.GT;
-%dataIn = imread("RBD_LKR13_1_DAPI.tiff");
+%dataIn = dataIn;
+%[rows,cols,channels] = size(dataIn);
+%GTinitial=  load("RBD_LKR13_1_DAPI_GT.mat")
+%GT = GTinitial.GT;
+dataIn = imread("RBD_LKR13_1_DAPI.tiff");
 dataIn(980:end,810:end,:)=0;
 blue_channel            = dataIn(:,:,3);
 % filter and threshold to detect cells
@@ -12,6 +12,7 @@ blue_channel_filt       = imfilter(blue_channel,fspecial('Gaussian',5));
 blue_channel_thres      = blue_channel_filt> 255*graythresh(blue_channel_filt);
 % label individual regions as cells, obtain properties
 blue_channel_labelled   = bwlabel(blue_channel_thres);
+
 blue_channel_props      = regionprops(blue_channel_labelled,'Area');
 % separate the large cells and fill them im
 [blue_channel_large,numCells]  = bwlabel(ismember(blue_channel_labelled,find([blue_channel_props.Area]>48)));
@@ -70,7 +71,26 @@ cells_touch_edge = cells_touch_1(1:2:end) +cells_touch_1(2:2:end)+...
 [central_cells,numCentral] = bwlabel(ismember(all_cells, find(cells_touch_edge==0)));
 
 central_cells_props     = regionprops(central_cells,blue_channel,'area','centroid','orientation','Solidity','MaxFeretProperties','MaxIntensity','MeanIntensity','MinIntensity');
+DAPI_orientation_props = regionprops(central_cells, 'Orientation');
+central_cells_area_props = regionprops(central_cells,'Area');
+DAPI_orientation_specific = ([DAPI_orientation_props.Orientation]);
+DAPI_orientation = ([DAPI_orientation_props.Orientation]);
+std_DAPI_orientation = std(DAPI_orientation_specific);
+DAPI_centroid_props = regionprops(central_cells, 'Centroid');
+DAPI_centroid_specific = ([DAPI_centroid_props.Centroid]);
+DAPI_centroid_rows = DAPI_centroid_specific(:,1:2:end);
+DAPI_centroid_rows = DAPI_centroid_rows(:);
+std_DAPI_centroid_rows = std2(DAPI_centroid_rows);
+DAPI_centroid_columns = DAPI_centroid_specific(:,2:2:end);
+DAPI_centroid_columns = DAPI_centroid_columns(:);
+std_DAPI_centroid_columns = std2(DAPI_centroid_columns);
+std_DAPI_centroid_rc = [std_DAPI_centroid_rows, std_DAPI_centroid_columns];
+std_DAPI_centroid = mean(std_DAPI_centroid_rc);
 
+ for k =1:numCentral
+   cell_area(k)= ([central_cells_area_props(k).Area]);
+   total_cell_area = sum(cell_area);
+ end
 % 2 combine the edges of the final cells and add to the input image,  also
 % add a number to each cell 
 %boundaries = bwboundaries(all_cells);
@@ -141,34 +161,36 @@ numCentroids            = numel(x);
 DT                      = (delaunay(x,y));
 
 numTriangles            = size(DT,1);
-%DT3 = delaunayTriangulation(x',y');
+DT3 = delaunayTriangulation(x',y');
 %imagesc(overlaid_cells)
 
-%hold on
-%triplot(DT,x,y);
-%for k=1:numTriangles
-   % DTarea            = polyarea(x(DT(k,:)),y(DT(k,:)));
-%end
+hold on
+triplot(DT,x,y);
+for k=1:numTriangles
+    DTarea            = polyarea(x(DT(k,:)),y(DT(k,:)));
+end
 
-%[vx,vy]=voronoi(x,y);
+[vx,vy]=voronoi(x,y);
 
 
 
-Jaccard1=((GT>0)+2*(central_cells>0));
+%Jaccard1=((GT>0)+2*(all_cells>0));
 %Jaccard = (Jaccard1==2)/(Jaccard1>0)
 %Jaccard = sum(sum(Jaccard1==2))/sum(sum(Jaccard1>0))
-Jaccard = sum(sum(Jaccard1==3))/sum(sum(Jaccard1>0));
+%Jaccard = sum(sum(Jaccard1==3))/sum(sum(Jaccard1>0))
 
-Accuracy= sum(sum((GT>0)==(central_cells>0)))/sum(sum(GT>=0));
+%Accuracy= sum(sum((GT>0)==(all_cells>0)))/sum(sum(GT>=0))
 
-DICE_DAPI = ((GT>0)+2*(central_cells>0));
-TP_DICE = (DICE_DAPI == 3);
-FNFP_DICE = (DICE_DAPI > 0 & DICE_DAPI < 3);
-DICE_measure = sum(sum(2*TP_DICE))/sum(sum((2*TP_DICE) + (FNFP_DICE)));
+%DICE_DAPI = ((GT>0)+2*(all_cells>0));
+%TP_DICE = (DICE_DAPI == 3);
+%FNFP_DICE = (DICE_DAPI > 0 & DICE_DAPI < 3);
+%DICE_measure = sum(sum(2*TP_DICE))/sum(sum((2*TP_DICE) + (FNFP_DICE)))
 
-num_GTCells = -1+numel(unique(GT));
+%num_GTCells = -1+numel(unique(GT));
 
-GTDAPI = ((GT>0)+2*(central_cells>0));
+%ratio_cells = numCentral/num_GTCells;
+
+%GTDAPI = ((GT>0)+2*(all_cells>0));
 %figure
 %imagesc(GTDAPI)
 %title(strcat('A=',32,num2str(Accuracy,3),',J=',32,num2str(Jaccard,3),',D=',num2str(DICE_measure,3)))
@@ -182,11 +204,16 @@ dataOut.central_cells   = central_cells;
 dataOut.numCentral      = numCentral;
 dataOut.central_props   = central_cells_props;
 dataOut.centroids       =[x' y'];
-dataOut.Jaccard         = Jaccard;
-dataOut.Accuracy        = Accuracy;
-dataOut.DICE_measure    = DICE_measure;
-dataOut.num_GTCells      = num_GTCells;
-dataOut.GTDAPI          = GTDAPI;
+dataOut.DAPI_orientation = DAPI_orientation;
+dataOut.std_DAPI_orientation = std_DAPI_orientation;
+dataOut.total_cell_area  = total_cell_area;
+dataOut.std_DAPI_centroid = std_DAPI_centroid;
+%dataOut.Jaccard         = Jaccard;
+%dataOut.Accuracy        = Accuracy;
+%dataOut.DICE_measure    = DICE_measure;
+%dataOut.num_GTCells      = num_GTCells;
+%dataOut.GTDAPI          = GTDAPI;
+%dataOut.ratio_cells     = ratio_cells;
 end
 
 %for k = 1:9
@@ -342,3 +369,4 @@ end
 % %[t17,p17,r17] = ttest2(results([1:5,19]),0.5+results([6:10,19]))
 % 
 % boxplot(results(:,3),[1 1 1 1 1 2 2 2 2 2])
+
