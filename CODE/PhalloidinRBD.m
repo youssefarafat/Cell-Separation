@@ -1,5 +1,6 @@
-function dataOut = PhalloidinRBD(dataIn1)
+function dataOut2 = PhalloidinRBD(dataIn1)
 dataIn1 = imread("RBD_LKR13_1_Phalloidin.tiff");
+[rows,cols,channels] = size(dataIn1);
 dataIn1(980:end,810:end,:)=0;
 red_channelR = dataIn1(:,:,1);
 red_channelR_filt       = imfilter(red_channelR,fspecial('Gaussian',5));
@@ -36,20 +37,31 @@ red_channelR_dilate = imdilate(red_channelR_closed, strel('disk', 15));
  labeled_filt_islands = bwlabel(filtered_islands);
  %imagesc(labeled_filt_islands);
  filt_island_props = regionprops(labeled_filt_islands,'Area');
+islands_orientation_props = regionprops(labeled_filt_islands,'Orientation');
+islands_orientation_specific = ([islands_orientation_props.Orientation]);
+islands_orientation = mean(islands_orientation_specific);
+std_islands_orientation = std(islands_orientation);
  n_islands = max(labeled_filt_islands(:));
  for k =1:n_islands
-   total_area(k)= (filt_island_props(k).Area);
+   total_area(k)= ([filt_island_props(k).Area]);
    ftotal_area = sum(total_area);
  end
+ area_results = total_area(:);
+ %rcarea_results = ftotal_area/rows/cols;
  mean_area_islands = ftotal_area/n_islands;
-dataOut.mean_area_islands = mean_area_islands; 
-dataOut.n_islands = n_islands;
-dataOut.red_channelR_distance = red_channelR_distance; 
-dataOut.red_channelR_skel = red_channelR_skel;
-dataOut.red_channelR_split = red_channelR_split;
-dataOut.edgeprops = edgeprops;
-dataOut.islands = islands;
-dataOut.labeled_filt_islands = labeled_filt_islands;
+dataOut2.total_area = total_area; 
+dataOut2.area_results  = area_results; 
+dataOut2.ftotal_area = ftotal_area;
+dataOut2.mean_area_islands = mean_area_islands; 
+dataOut2.n_islands = n_islands;
+dataOut2.red_channelR_distance = red_channelR_distance; 
+dataOut2.red_channelR_skel = red_channelR_skel;
+dataOut2.red_channelR_split = red_channelR_split;
+dataOut2.edgeprops = edgeprops;
+dataOut2.islands = islands;
+dataOut2.labeled_filt_islands = labeled_filt_islands;
+dataOut2.islands_orientation = islands_orientation;
+dataOut2.std_islands_orientation = std_islands_orientation;
 end
  %% Repeat same operation for the WT, Turn commands into a function, find
  %  breaking points, dilate then remove. find a line that is perpendicular.
