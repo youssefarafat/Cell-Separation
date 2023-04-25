@@ -1,0 +1,60 @@
+%% PHALLOIDIN METHOD PART 3
+figure
+
+
+
+subplot(2,5,1)
+h1 = imagesc(red_channelR_skel)
+h1 = gca;
+
+subplot(2,5,2)
+h2 = imagesc(step4)
+h2 = gca;
+
+subplot(2,5,3)
+h3 = imagesc(red_channelR_dilatesplit)
+h3 = gca;
+
+subplot(2,5,4)
+h4 = imagesc(red_channelR_split)
+h4 = gca;
+
+subplot(2,5,5)
+h5 = imagesc(red_channelR_split)
+h5 = gca;
+
+subplot(2,5,6)
+h(9) = imagesc(red_channelR_skel)
+h(9) = gca;
+h(9).XLim=[700 950];
+h(9).YLim=[200 400];
+
+subplot(2,5,7)
+h(10) = imagesc(step4)
+h(10) = gca;
+h(10).XLim=[700 950];
+h(10).YLim=[200 400];
+
+subplot(2,5,8)
+h(11) = imagesc(red_channelR_dilatesplit)
+h(11) = gca;
+h(11).XLim= [700 950];
+h(11).YLim= [200 400];
+
+subplot(2,5,9)
+h(11) = imagesc(red_channelR_dilatesplit)
+h(11) = gca;
+h(11).XLim= [700 950];
+h(11).YLim= [200 400];
+
+subplot(2,5,10)
+h(11) = imagesc(red_channelR_dilatesplit)
+h(11) = gca;
+h(11).XLim= [700 950];
+h(11).YLim= [200 400];
+
+subplot(2,6,12)
+h(12) = imagesc(red_channelR_split)
+h(12) = gca;
+h(12).XLim= [700 950];
+h(12).YLim= [200 400];
