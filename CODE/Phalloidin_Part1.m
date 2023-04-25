@@ -1,41 +1,69 @@
 %% PHALLOIDIN METHOD PART 1 
 figure
-subplot(2,4,1)
-h(1) = imagesc(imread("RBD_LKR13_1_Phalloidin.tiff"))
-h(1) = gca;
+subplot(2,5,1)
+h1 = imagesc(imread("RBD_LKR13_1_Phalloidin.tiff"))
+h1 = gca;
 
-subplot(2,4,2)
-h(2) = imagesc(red_channelR)
-h(2) = gca;
+subplot(2,5,2)
+h2 = imagesc(red_channelR)
+h2 = gca;
 
-subplot(2,4,3)
-h(3) = imagesc(red_channelR_filt)
-h(3) = gca;
+subplot(2,5,3)
+h3 = imagesc(red_channelR_filt)
+h3 = gca;
 
-subplot(2,4,4)
-h(4) = imagesc(red_channelR_thres)
-h(4) = gca;
+subplot(2,5,4)
+h4 = imagesc(red_channelR_thres)
+h4 = gca;
 
-subplot(2,4,5)
-h(5) = imagesc(imread("RBD_LKR13_1_Phalloidin.tiff"))
-h(5) = gca;
-h(5).XLim=[700 950];
-h(5).YLim=[200 400];
+subplot(2,5,5)
+h6 = imagesc((red_channelR_labelled))
+h6 = gca;
 
-subplot(2,4,6)
-h(6) = imagesc(red_channelR)
-h(6) = gca;
-h(6).XLim=[700 950];
-h(6).YLim=[200 400];
 
-subplot(2,4,7)
-h(7) = imagesc(red_channelR_filt)
-h(7) = gca;
-h(7).XLim=[700 950];
-h(7).YLim=[200 400];
 
-subplot(2,4,8)
-h(8) = imagesc(red_channelR_thres)
-h(8) = gca;
-h(8).XLim= [700 950];
-h(8).YLim= [200 400];
+subplot(2,5,6)
+h6 = imagesc(imread("RBD_LKR13_1_Phalloidin.tiff"))
+h6 = gca;
+h6.XLim=[700 950];
+h6.YLim=[200 400];
+
+subplot(2,5,7)
+h7 = imagesc(red_channelR)
+h7 = gca;
+h7.XLim=[700 950];
+h7.YLim=[200 400];
+
+subplot(2,5,8)
+h8 = imagesc(red_channelR_filt)
+h8 = gca;
+h8.XLim=[700 950];
+h8.YLim=[200 400];
+
+subplot(2,5,9)
+h9 = imagesc(red_channelR_thres)
+h9 = gca;
+h9.XLim= [700 950];
+h9.YLim= [200 400];
+
+subplot(2,5,10)
+h10 = imagesc((red_channelR_labelled))
+h10 = gca;
+h10.XLim= [700 950];
+h10.YLim= [200 400];
+
+for k = 1:5
+    h(k).Position = [-0.14+k*0.195 0.55 0.145 0.42];
+    h(k).YLabel.FontSize=11;
+    h(k).Title.FontSize=9;
+
+end 
+
+for k = 6:10
+    h(k).Position = [-0.14+(k-5)*0.195 0.05 0.145 0.42];
+    h(k).YLabel.FontSize=11;
+    h(k).Title.FontSize=9;
+
+end 
+filename='Phalloidin_segmentation_1.png';
+print('-dpng','-r200',filename)
