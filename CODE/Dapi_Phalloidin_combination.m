@@ -6,7 +6,7 @@ function dataOut = Dapi_Phalloidin_combination(central_cells_D_P,islands_D_P)
 
 %central_cells_D_P = dataOut.central_cells;
 %islands_D_P = dataOut.islands;
-dataIn2 = ((central_cells_D_P).*(islands_D_P));
+%dataIn2 = ((central_cells_D_P).*(islands_D_P));
 island_properties = regionprops(islands_D_P,'Area');
 %must find out how to find number of labels,*SOLVED* look down.
 n_island_image = max(islands_D_P(:));
@@ -22,13 +22,13 @@ for k = 1:n_island_image
     ratio_sum(k) = (cells_area_ratio);
     loop_fmean_ratio = sum(ratio_sum/(n_island_image));
 end
-fmean_unique_cells_island10 = sum(nnz_uni_cells)/n_island_image;
-fmean_ratio10 = sum(ratio_sum/(n_island_image));
+fmean_unique_cells_island = sum(nnz_uni_cells)/n_island_image;
+fmean_ratio = sum(ratio_sum/(n_island_image));
 
 dataOut.Unique_cells_island = Unique_cells_island;
 dataOut.cells_area_ratio = cells_area_ratio;
-dataOut.fmean_unique_cells_island = mean_unique_cells_island;
-dataOut.fmean_ratio = mean_ratio;
+dataOut.fmean_unique_cells_island = fmean_unique_cells_island;
+dataOut.fmean_ratio = fmean_ratio;
 
 end
 
