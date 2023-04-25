@@ -1,0 +1,54 @@
+
+%% DAPI METHODS FINAL PART 1 
+figure(1)
+
+h1 = subplot(2,5,1)
+imagesc(dataIn)
+h1.Position = [0.15 0.15 0.4 0.4]
+
+h2 =subplot(2,5,2)
+ imagesc(blue_channel)
+h2.Position = [0.15 0.15 0.4 0.4]
+
+h3 =  subplot(2,5,3)
+imagesc(blue_channel_filt)
+h3.Position = [0.15 0.15 0.4 0.4]
+
+h4 = subplot(2,5,4)
+imagesc(blue_channel_thres)
+h4.Position = [0.15 0.15 0.4 0.4]
+
+h5 = subplot(2,5,5)
+imagesc(blue_channel_labelled)
+h5.Position = [0.15 0.15 0.4 0.4]
+
+h6 =subplot(2,5,6)
+imagesc(dataIn);
+h6.Xlim=[0 400]
+h6.Ylim=[0 400]
+h6.Position = [0.15 0.15 0.4 0.4]
+
+
+h7 = subplot(2,5,7)
+imagesc(blue_channel);
+h7.Xlim=[0 400]
+h7.Ylim=[0 400]
+h7.Position = [0.15 0.15 0.4 0.4]
+
+h8 = subplot(2,5,8)
+imagesc(blue_channel_filt);
+h8.Xlim=[0 400]
+h8.Ylim=[0 400]
+h8.Position = [0.15 0.15 0.4 0.4]
+
+h9 = subplot(2,5,9)
+imagesc(blue_channel_thres);
+h9.XLim=[0 400]
+h9.YLim=[0 400]
+h9.Position = [0.15 0.15 0.4 0.4]
+
+h10 = subplot(2,6,10)
+imagesc(blue_channel_labelled);
+h10.XLim=[0 400]
+h10.YLim=[0 400]
+h10.Position = [0.15 0.15 0.4 0.4]
